@@ -1,46 +1,40 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-class Search extends Component {
-    state = {
-        searchText: '',
+const Search = ({ onSearch, updateAlert }) => {
+    const [searchText, setSearchText] = useState('');
+    const updateSearch = ({ target: { value } }) => {
+        setSearchText(value);
     };
-    updateSearch = ({ target: { value, name } }) => {
-        this.setState({
-            [name]: value,
-        });
-    };
-    onSubmit = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
-        const parameter = this.state.searchText;
+        const parameter = searchText;
         if (parameter !== '') {
-            this.props.onSearch(parameter);
-            this.setState({
-                searchText: '',
-            });
+            onSearch(parameter);
+            setSearchText('');
         } else {
-            this.props.setAlert('Please enter something', 'info');
+            updateAlert('Please enter something', 'info');
         }
     };
-    static propType = {
-        onSearch: PropTypes.func.isRequired,
-    };
-    render() {
-        return (
-            <div className='form'>
-                <form onSubmit={this.onSubmit}>
-                    <input
-                        type='text'
-                        name='searchText'
-                        placeholder='Search users'
-                        value={this.state.searchText}
-                        onChange={this.updateSearch}
-                    />
-                    <input type='submit' value='Search' className='btn' />
-                </form>
-            </div>
-        );
-    }
-}
+    return (
+        <div className='form'>
+            <form onSubmit={onSubmit}>
+                <input
+                    type='text'
+                    name='searchText'
+                    placeholder='Search users'
+                    value={searchText}
+                    onChange={updateSearch}
+                />
+                <input type='submit' value='Search' className='btn' />
+            </form>
+        </div>
+    );
+};
+
+Search.propTypes = {
+    onSearch: PropTypes.func.isRequired,
+    updateAlert: PropTypes.func.isRequired,
+};
 
 export default Search;
