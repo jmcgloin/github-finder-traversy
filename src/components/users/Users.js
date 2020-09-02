@@ -1,25 +1,30 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useEffect, useContext} from 'react';
 
+import GithubContext from '../../context/github/githubContext';
 import UserItem from './UserItem';
 
-const Users = ({ users, loading, getUser }) => {
-    return (
-        <div className='card-container'>
-            {loading ? (
-                <h1>Loading...</h1>
-            ) : (
-                users.map((user) => (
-                    <UserItem user={user} key={user.id} getUser={getUser} />
-                ))
-            )}
-        </div>
-    );
-};
+const Users = ({ getUser }) => {
+    const githubContext = useContext(GithubContext);
+    const {loading, users, updated, searchUsers} = githubContext;
 
-Users.propTypes = {
-    users: PropTypes.array.isRequired,
-    loading: PropTypes.bool.isRequired,
+     useEffect(() => {
+        searchUsers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    if(loading) {
+        return <h1>Loading...</h1>
+    } else {
+        return (
+            <div className='card-container'>
+                {users.length > 0 ? users.map((user) => (
+                    <UserItem user={user} key={user.id} getUser={getUser} />
+                )) : (
+                    updated && <div>No search results found.</div>
+                )}
+            </div>
+        )
+    }
 };
 
 export default Users;

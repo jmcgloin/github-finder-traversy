@@ -1,5 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
-export default function Alert({ message, type = null }) {
-    return type && <div className={`alert alert-${type}`}>{message}</div>;
+import AlertContext from "../../context/alert/alertContext";
+
+const Alert = () => {
+
+	const alertContext = useContext(AlertContext);
+
+	const {alert} = alertContext;
+
+	return alert && <div className={`alert alert-${alert.type}`}>{alert.message}</div>;
 }
+
+export default Alert

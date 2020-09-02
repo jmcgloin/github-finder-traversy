@@ -1,20 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useContext} from 'react';
 
-const Clear = (props) => {
+import GithubContext from '../../context/github/githubContext';
+
+const Clear = props => {
+    const githubContext = useContext(GithubContext);
+    const {onClear, updated, users} = githubContext;
     const onClick = (e) => {
         e.preventDefault();
-        props.onClear();
+        onClear();
     };
-    return (
+    return (updated && (users.length > 0) ) && (
         <button onClick={onClick} className='btn'>
             Clear
         </button>
     );
-};
-
-Clear.propTypes = {
-    onClear: PropTypes.func.isRequired,
 };
 
 export default Clear;
